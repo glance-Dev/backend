@@ -46,10 +46,8 @@ function getVideoInfo(req, res) {
   let url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryParam}%20tutorials&type=video&key=${vidAPI_KEY}`
   axios.get(url)
     .then(result => {
-      let searchedMovies = result.data.items.map(movie => {
-        return movie
-      })
-      res.json(searchedMovies);
+      res.json(result.data.items)
+
     })
     .catch(error => {
       console.log(error);
@@ -61,10 +59,8 @@ function getPlayListVideos(req, res) {
   let url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${queryParam}%20tutorials&key=${vidAPI_KEY}`
   axios.get(url)
     .then(result => {
-      let searchedMovies = result.data.items.map(movie => {
-        return movie
-      })
-      res.json(searchedMovies);
+      res.json(result.data.items)
+
     })
     .catch(error => {
       console.log(error);
@@ -74,17 +70,17 @@ function getPlayListVideos(req, res) {
 function getQuizzes(req, res) {
   const queryParam = req.query.param;
   const url = `https://quiz.integritygrove.tech/api/v1/questions?cat=${queryParam}`;
+
   axios.get(url)
     .then(result => {
-      let searchedQuizes = result.data.data.map(quiz => {
-        return quiz
-      })
-      res.json(searchedQuizes);
+      res.json(result.data.data);
     })
     .catch(error => {
-      console.log(error);
-    })
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    });
 }
+
 function getAllusers(req, res) {
   const sql = 'SELECT * FROM users;';
   client.query(sql).then(result => {
