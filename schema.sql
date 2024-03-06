@@ -11,6 +11,7 @@ CREATE TABLE user_course (
     user_id varchar(255),
     course_id varchar(255),
     completed BOOLEAN DEFAULT false,
+    course_name VARCHAR(255),
     PRIMARY KEY (user_id, course_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (course_id) REFERENCES course(course_id)

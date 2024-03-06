@@ -103,7 +103,6 @@ function addUser(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 function updateUser(req, res) {
   const userId = req.params.id;
   const { user_id, user_name, user_email } = req.body;
@@ -117,7 +116,6 @@ function updateUser(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 function deleteUser(req, res) {
   const userId = req.params.id;
   const sql = 'DELETE FROM users WHERE user_id = $1 RETURNING *;';
@@ -130,7 +128,6 @@ function deleteUser(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 // Course Routes
 function getAllCourses(req, res) {
   const sql = 'SELECT * FROM course;';
@@ -142,7 +139,6 @@ function getAllCourses(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 function addCourse(req, res) {
   const { course_id, course_name } = req.body;
   const sql = 'INSERT INTO course VALUES ($1, $2) RETURNING *;';
@@ -155,7 +151,6 @@ function addCourse(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 // Registered Courses Routes
 function getRegisteredCourses(req, res) {
   const sql = 'SELECT * FROM user_course;';
@@ -168,9 +163,9 @@ function getRegisteredCourses(req, res) {
     });
 }
 function addRegisteredCourse(req, res) {
-  const { user_id, course_id, completed } = req.body;
-  const sql = 'INSERT INTO user_course VALUES ($1, $2, $3) RETURNING *;';
-  const values = [user_id, course_id, completed];
+  const { user_id, course_id, completed, course_name } = req.body;
+  const sql = 'INSERT INTO user_course VALUES ($1, $2, $3,$4) RETURNING *;';
+  const values = [user_id, course_id, completed, course_name];
   client.query(sql, values)
     .then(result => {
       res.status(201).json(result.rows);
@@ -181,9 +176,9 @@ function addRegisteredCourse(req, res) {
 }
 
 function updateRegisteredCourse(req, res) {
-  const { user_id, course_id, completed } = req.body;
-  const sql = 'UPDATE user_course SET completed = $1 WHERE user_id = $2 AND course_id = $3 RETURNING *;';
-  const values = [completed, user_id, course_id];
+  const { user_id, course_id, completed, course_name } = req.body;
+  const sql = 'UPDATE user_course SET user_id = $1, course_id=$2, completed=$3,course_name=$4 WHERE user_id = $5 AND course_id = $6 RETURNING *;';
+  const values = [user_id, course_id, completed, course_name, user_id, course_id];
   client.query(sql, values)
     .then(result => {
       res.json(result.rows);
@@ -192,7 +187,6 @@ function updateRegisteredCourse(req, res) {
       res.status(500).json({ error: 'Internal Server Error' });
     });
 }
-
 function removeRegisteredCourse(req, res) {
   const userId = req.params.userId;
   const courseId = req.params.courseId;
