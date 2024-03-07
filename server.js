@@ -164,7 +164,7 @@ function getRegisteredCourses(req, res) {
 }
 function addRegisteredCourse(req, res) {
   const { user_id, course_id, completed, course_name } = req.body;
-  const sql = 'INSERT INTO user_course VALUES ($1, $2, $3,$4) RETURNING *;';
+  const sql = 'INSERT INTO user_course VALUES ($1, $2, $3, $4) RETURNING *;';
   const values = [user_id, course_id, completed, course_name];
   client.query(sql, values)
     .then(result => {
